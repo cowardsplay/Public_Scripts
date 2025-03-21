@@ -1,1 +1,78 @@
-test
+<DOCTYPE html>
+<html>
+    <head>
+        <title>Active RDP Connections</title>
+            <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                }
+                th, td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                }
+                th {
+                background-color: #f2f2f2;
+                text-align: left;
+                 }
+                </style>
+     </head>
+<body>
+    <h1>Current RDP Connections</h1>
+    <table>
+            <thead>
+                <tr>
+                <th>User Name</th>
+                <th>Host Name</th>
+                <th>Timestamp</th>
+                </tr>
+            </thead>
+    
+    <tbody id="log-table">
+    
+    </tbody>
+    </table>
+    
+    <script>
+    
+    async function fetchLogs() {
+    
+       try {
+        const response = await fetch('http://<ip-host>/logs.php'); // Update to your PHP endpoint - In our case this is the php page that is hosted on the apache webserver.
+        if (!response.ok) {
+        console.error('Failed to fetch logs:', response.statusText);
+        return;
+    }
+    
+    const logs = await response.json();
+    // Log the full response to inspect its structure
+    console.log('Logs fetched:', logs);
+    // Ensure logs are an array before processing
+    if (!Array.isArray(logs)) {
+    console.error('Unexpected data format:', logs);
+    return;
+    }
+    // Render logs into the table
+    const tableBody = document.getElementById('log-table');
+    tableBody.innerHTML = logs.map(log => {
+    const userName = log._source?.user?.name || 'N/A';  // Access user.name safely
+    const hostName = log._source?.host?.name || 'N/A';  // Access host.name safely
+    const timestamp = log._source?.['@timestamp'] ? new Date(log._source['@timestamp']).toLocaleString() : 'N/A';  // Convert timestamp
+    return `
+    <tr>
+        <td>${userName}</td>
+        <td>${hostName}</td>
+        <td>${timestamp}</td>
+    </tr>
+    `;
+    }).join('');
+    } catch (error) {
+    console.error('Error fetching logs:', error);
+    }
+    }
+    fetchLogs(); // Fetch logs on page load
+    setInterval(fetchLogs, 10000); // Refresh every 10 seconds
+    </script>
+    </body>
+</html>
+    
