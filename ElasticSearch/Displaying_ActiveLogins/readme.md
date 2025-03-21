@@ -1,1 +1,9 @@
-This application requires 2 different machines in order to run. First you will need to have a stood up Elasticsearch instance and have an agent running on a machine so that elastic is collecting logs. The second thing that you will need is to create the seperate server to host the apache webpage that will have both the index.html home page and the backend logs.php code. Make sure that they boxes are able to communicate with each other this is important in order to provide the webserver the ability to collec logs. Once you have set those up you will need to make sure that you have modified the specified fields in the code. Once all that is done correctly you should have the working dashboard where you can see the active logins happening at a refresh rate of 10 seconds. 
+This application requires two separate machines to function effectively.
+
+1. Elasticsearch Setup: The first machine must host an operational Elasticsearch instance with an agent running to ensure logs are being collected and indexed appropriately.
+
+2. Web Server Deployment: The second machine will act as the web server, hosting an Apache setup that serves the index.html homepage and processes data using the logs.php backend code.
+
+It is essential to configure communication between these two systems to enable the web server to retrieve logs from Elasticsearch. Without this connection, the web application cannot access the required data.
+
+After establishing the infrastructure, ensure the necessary fields in the code are correctly modified to reflect your specific setup. Upon successful completion of these steps, the dashboard will be operational, providing real-time updates on active logins with a refresh interval of 10 seconds.
